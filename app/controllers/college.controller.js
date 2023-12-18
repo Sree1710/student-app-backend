@@ -16,12 +16,12 @@ const storage = multer.diskStorage({
 
 const fileFilter = function (req, file, cb) {
     // Accept only JPG and JPEG files
-    const allowedExtensions = /\.(jpg|jpeg)$/;
+    const allowedExtensions = /\.(jpg|jpeg|png|webp|heif)$/;
 
     if (allowedExtensions.test(path.extname(file.originalname).toLowerCase())) {
         return cb(null, true);
     } else {
-        return cb('Only JPG and JPEG files are allowed!', false);
+        return cb('Only JPG, JPEG, PNG, WEBP and HEIF files are allowed!', false);
     }
 };
 
@@ -34,15 +34,19 @@ exports.collegeCreate = (request, response) => {
             return response.json({ "status": err });
         }
 
-        const { collegeName, collegeAddress, website, email, collegePhNo } = request.body;
+        const { collegeName, collegeAddress, website, email, collegePhNo, collegeMobileNumber } = request.body;
         const collegeToken = request.body.token;
 
         if (!collegeName || collegeName.trim() === "") {
             return response.json({ "status": "College name cannot be empty." });
         }
 
-        if (!collegePhNo || !/^\+91[6-9][0-9]{9}$/.test(collegePhNo)) {
+        if (!collegePhNo || !/^\d{2,4}\d{6,8}$/.test(collegePhNo)) {
             return response.json({ "status": "Invalid Phone Number" });
+        }
+
+        if (!collegeMobileNumber || !/^\+91[6-9][0-9]{9}$/.test(collegeMobileNumber)) {
+            return response.json({ "status": "Invalid Mobile Number" });
         }
 
         if (!collegeAddress || collegeAddress.length > 100) {
@@ -65,6 +69,7 @@ exports.collegeCreate = (request, response) => {
             website: website,
             email: email,
             collegePhNo: collegePhNo,
+            collegeMobileNumber: collegeMobileNumber,
             collegeImage: collegeImage  // Set the collegeImage field with the filename
         });
 
