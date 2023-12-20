@@ -17,15 +17,15 @@ exports.batchCreate = (request, response) => {
         validationErrors.name = Validator.isValidName(request.body.batchName).message
     }
 
-    if (Validator.isEmpty(request.body.regStartDate).isValid) {
-        validationErrors.regstartdate = Validator.isEmpty(request.body.regStartDate).message;
+    if (!Validator.isDateGreaterThanToday(request.body.regStartDate).isValid) {
+        validationErrors.regstartdate = Validator.isDateGreaterThanToday(request.body.regStartDate).message;
     }
     if (!Validator.isValidDate(request.body.regStartDate).isValid) {
         validationErrors.regstartdate = Validator.isValidDate(request.body.regStartDate).message
     }
 
-    if (Validator.isEmpty(request.body.regEndDate).isValid) {
-        validationErrors.regenddate = Validator.isEmpty(request.body.regEndDate).message
+    if (!Validator.isDateGreaterThanToday(request.body.regEndDate).isValid) {
+        validationErrors.regenddate = Validator.isDateGreaterThanToday(request.body.regEndDate).message
     }
     if (!Validator.isValidDate(request.body.regEndDate).isValid) {
         validationErrors.regenddate = Validator.isValidDate(request.body.regEndDate).message
