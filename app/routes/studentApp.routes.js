@@ -18,6 +18,7 @@ router.post("/addbatches",BatchesCollector.batchCreate)
 
 router.post("/addtask",TaskController.createTask)
 
+router.post("/updatetask",TaskController.taskUpdate)
 
 
 
