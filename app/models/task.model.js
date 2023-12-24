@@ -124,10 +124,4 @@ Tasks.updateTask = (updatedTask, result) => {
         });
 };
 
-
-
-
-
-
-
-module.exports=Tasks
+module.exports = Tasks
