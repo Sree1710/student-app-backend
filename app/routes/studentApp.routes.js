@@ -5,6 +5,7 @@ const AdminStaffController=require('../controllers/adminStaff.controller')
 const CollegeController=require("../controllers/college.controller")
 const BatchesCollector=require('../controllers/batches.controller')
 const TaskController=require('../controllers/task.controller')
+const StudentController=require('../controllers/student.controller')
 
 router.post("/", AdminController.adminLogin)
 
@@ -19,6 +20,10 @@ router.post("/addbatches",BatchesCollector.batchCreate)
 router.post("/addtask",TaskController.createTask)
 
 router.post("/updatetask",TaskController.taskUpdate)
+
+router.post("/studreg",StudentController.createStudent)
+
+
 
 
 
