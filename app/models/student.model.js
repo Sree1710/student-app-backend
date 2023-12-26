@@ -17,15 +17,15 @@ const Student = function (student) {
     this.membership_no = student.membership_no;
 };
 
+const Payment = function (payment) {
+    this.id = payment.id;
+    this.studId = payment.studId;
+    this.rpPaymentId = payment.rpPaymentId;
+    this.rpOrderId = payment.rpOrderId;
+    this.rpAmount = payment.rpAmount;
+};
 
 Student.create = (newStudent, result) => {
-    const Payment = function (payment) {
-        this.id = payment.id;
-        this.studId = payment.studId;
-        this.rpPaymentId = payment.rpPaymentId;
-        this.rpOrderId = payment.rpOrderId;
-        this.rpAmount = payment.rpAmount;
-    };
 
     const currentYear = new Date().getFullYear();
     const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, "0");
@@ -140,4 +140,4 @@ Student.create = (newStudent, result) => {
         });
 };
 
-module.exports = Student;
+module.exports = {Student,Payment};

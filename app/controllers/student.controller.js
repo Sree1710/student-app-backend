@@ -1,6 +1,6 @@
 const { request, response } = require("express");
-const StudentModel = require("../models/student.model");
-const PaymentModel = require("../models/payment.model");
+const Student = require("../models/student.model");
+const Payment = require("../models/student.model");
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const Validator = require("../config/data.validate");
@@ -45,7 +45,7 @@ exports.createStudent = (req, res) => {
                 return res.json({ "status": err });
             }
 
-            const newStudent = new StudentModel({
+            const newStudent = new Student({
                 collegeId: collegeId,
                 batchId: batchId,
                 studName: studName,
@@ -60,7 +60,7 @@ exports.createStudent = (req, res) => {
                 password: hashedPassword
             });
 
-            StudentModel.create(newStudent, (err, data) => {
+            Student.create(newStudent, (err, data) => {
                 if (err) {
                     return res.json({ "status": err });
                 } else {
@@ -72,7 +72,7 @@ exports.createStudent = (req, res) => {
                         rpAmount: rpAmount
                     });
 
-                    PaymentModel.create(newPayment, (paymentErr, paymentData) => {
+                    Payment.create(newPayment, (paymentErr, paymentData) => {
                         if (paymentErr) {
                             return res.json({ "status": paymentErr });
                         } else {
