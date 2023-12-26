@@ -1,8 +1,9 @@
 const { request, response } = require("express");
-const db = require("../models/db");
-const Student = require("../models/student.model");
+const StudentModel = require("../models/student.model");
+const PaymentModel = require("../models/payment.model");
 const multer = require('multer');
 const bcrypt = require('bcrypt');
+const Validator = require("../config/data.validate");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -23,18 +24,28 @@ exports.createStudent = (req, res) => {
             return res.json({ "status": err });
         }
 
-        const { collegeId, batchId, studName, admNo, rollNo, studDept, course, studEmail, studPhNo, aadharNo, password } = req.body;
+        const { collegeId, batchId, studName, admNo, rollNo, studDept, course, studEmail, studPhNo, aadharNo, password, rpPaymentId, rpOrderId, rpAmount } = req.body;
 
         const saltRounds = 10;
 
-        const studProfilePic = req.file? req.file.filename : null 
+        const studProfilePic = req.file ? req.file.filename : null;
+
+        // Validation
+        const validationErrors = {};
+
+        // ... (rest of the validation code)
+
+        // If validation fails
+        if (Object.keys(validationErrors).length > 0) {
+            return res.json({ "status": "Validation failed", "data": validationErrors });
+        }
 
         bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
             if (err) {
                 return res.json({ "status": err });
             }
 
-            const newStudent = new Student({
+            const newStudent = new StudentModel({
                 collegeId: collegeId,
                 batchId: batchId,
                 studName: studName,
@@ -49,14 +60,27 @@ exports.createStudent = (req, res) => {
                 password: hashedPassword
             });
 
-            Student.create(newStudent, (err, data) => {
+            StudentModel.create(newStudent, (err, data) => {
                 if (err) {
                     return res.json({ "status": err });
                 } else {
-                    return res.json({ "status": "success", "data": data });
+                    // Payment creation logic can be added here
+                    const newPayment = new PaymentModel({
+                        studId: data.id, // Assuming 'id' is the student's ID
+                        rpPaymentId: rpPaymentId,
+                        rpOrderId: rpOrderId,
+                        rpAmount: rpAmount
+                    });
+
+                    PaymentModel.create(newPayment, (paymentErr, paymentData) => {
+                        if (paymentErr) {
+                            return res.json({ "status": paymentErr });
+                        } else {
+                            return res.json({ "status": "success", "data": data, "paymentData": paymentData });
+                        }
+                    });
                 }
             });
         });
     });
 };
-
